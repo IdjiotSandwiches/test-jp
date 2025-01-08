@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js"></script>
+    <title>Invoice</title>
+  </head>
+  <body>
+    <form action="" id="search_invoice">
+      <label for="no_invoice">No Invoice</label>
+      <input type="text" id="no_invoice" />
+      <button type="submit">View</button>
+    </form>
+
+    <form action="" id="invoice_detail">
+        <section id="form">
+            <section>
+                <div>
+                    <label for="invoice_date">Invoice Date</label>
+                    <input type="date" id="invoice_date" class="input-form">
+                </div>
+                <div>
+                    <label for="to">To</label>
+                    <textarea name="to" id="to" cols="50" rows="10" class="input-form"></textarea>
+                </div>
+                <div>
+                    <label for="sales_name">Sales Name</label>
+                    <select name="sales_name" id="sales_name" class="input-form"></select>
+                </div>
+                <div>
+                    <label for="courier">Courier</label>
+                    <select name="courier" id="courier" class="input-form"></select>
+                </div>
+            </section>
+            <section>
+                <div>
+                    <label for="ship_to">Ship To</label>
+                    <textarea name="ship_to" id="ship_to" cols="50" rows="10" class="input-form"></textarea>
+                </div>
+                <div>
+                    <label for="payment_type">Payment Type</label>
+                    <select name="payment_type" id="payment_type" class="input-form"></select>
+                </div>
+            </section>
+        </section>
+        <table>
+            <thead>
+                <th scope="col">Item</th>
+                <th scope="col">Weight(Kg)</th>
+                <th scope="col">QTY</th>
+                <th scope="col">Unit Price</th>
+                <th scope="col">Total</th>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <div id="total">
+            <div class="fee">
+                <p>Sub Total</p>
+                <p>10000</p>
+            </div>
+            <div class="fee">
+                <p>Courier Fee</p>
+                <p>10000</p>
+            </div>
+            <div class="fee">
+                <p>Total</p>
+                <p>10000</p>
+            </div>
+        </div>
+        <button type="submit">SAVE</button>
+    </form>
+  </body>
+</html>
