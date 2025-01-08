@@ -12,7 +12,7 @@ namespace API.Data
 
         public DbSet<TrInvoiceDetail> TrInvoiceDetail { get; set; }
         public DbSet<TrInvoice> TrInvoice { get; set; }
-        public DbSet<CourierFee> CourierFee { get; set; }
+        public DbSet<LtCourierFee> LtCourierFee { get; set; }
         public DbSet<MsCourier> MsCourier { get; set; }
         public DbSet<MsPayment> MsPayment { get; set; }
         public DbSet<MsProduct> MsProduct { get; set; }

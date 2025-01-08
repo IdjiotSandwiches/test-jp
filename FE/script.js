@@ -2,6 +2,7 @@ function fetchRequest(url) {
     fetch(url, {
         'X-Requested-With': 'XMLHttpRequest',
     }).then(response => {
+        if (!response.ok) throw new Error('Not Found');
         return response.json();
     }).then(response => {
         console.log(response);
@@ -12,6 +13,11 @@ function fetchRequest(url) {
         const shipTo = document.querySelector('#ship_to');
         const paymentType = document.querySelector('#payment_type');
         const table = document.querySelector('table tbody');
+
+        courierSelect.replaceChildren();
+        paymentType.replaceChildren();
+        salesName.replaceChildren();
+        table.replaceChildren();
 
         response.courier.forEach(option => {
             let item = `<option value="${option.courierID}">${option.courierName}</option>`;
@@ -49,7 +55,7 @@ function fetchRequest(url) {
         shipTo.value = response.invoice.shipTo;
 
     }).catch(error => {
-        console.log(error);
+        alert(error)
     })
 }
 

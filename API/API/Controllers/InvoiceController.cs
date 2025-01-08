@@ -1,55 +1,32 @@
-﻿using API.Data;
-using API.Helpers;
-using API.Models;
+﻿using API.Helpers;
 using AutoMapper;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
     [EnableCors]
     [ApiController]
     [Route("api/[controller]")]
-    public class InvoiceController(AppDbContext dbContext, InvoiceHelper invoiceHelper, IMapper mapper) : ControllerBase
+    public class InvoiceController(InvoiceHelper invoiceHelper, IMapper mapper) : ControllerBase
     {
-        private readonly AppDbContext _dbContext = dbContext;
         private readonly InvoiceHelper _invoiceHelper = invoiceHelper;
         private readonly IMapper _mapper = mapper;
 
         [HttpGet("{invoice_number}", Name = "GetInvoiceNumber")]
-        public async Task<ActionResult<TrInvoice>> GetInvoiceNumber(string invoice_number)
+        public async Task<ActionResult<object>> GetInvoiceNumber(string invoice_number)
         {
-            var invoice = await _dbContext.TrInvoice
-                .FirstAsync(x => x.InvoiceNo == invoice_number);
+            var invoice = await _invoiceHelper.GetInvoice(invoice_number);
+            var sales = await _invoiceHelper.GetSales();
+            var courier = await _invoiceHelper.GetCouriers();
+            var payment = await _invoiceHelper.GetPayments();
+            var items = await _invoiceHelper.GetItems(invoice_number);
+            var courierFee = await _invoiceHelper.GetCourierFee();
 
-            var sales = await _dbContext.MsSales
-                .ToListAsync();
-
-            var courier = await _dbContext.MsCourier
-                .ToListAsync();
-
-            var payment = await _dbContext.MsPayment
-                .ToListAsync();
-
-            var items = await _dbContext.TrInvoiceDetail
-                .Join(_dbContext.MsProduct,
-                    detail => detail.ProductID,
-                    product => product.ProductID,
-                    (detail, product) => new
-                    {
-                        detail, product
-                    })
-                .Where(x => x.detail.InvoiceNo == invoice_number)
-                .Select(x => new
-                {
-                    item = x.product.ProductName,
-                    weight = x.detail.Weight,
-                    qty = x.detail.Qty,
-                    price = x.detail.Price,
-                    total = x.detail.Qty * x.detail.Price
-                })
-                .ToListAsync();
+            if (invoice == null)
+            {
+                return BadRequest();
+            }
 
             return Ok(new {
                 Invoice = invoice,
@@ -57,7 +34,15 @@ namespace API.Controllers
                 Courier = courier,
                 Payment = payment,
                 Items = items,
+                CourierFee = courierFee
             });
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<object>> UpdateInvoice()
+        {
+
+            return Ok();
         }
     }
 }
