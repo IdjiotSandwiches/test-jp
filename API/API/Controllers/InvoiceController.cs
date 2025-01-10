@@ -13,15 +13,11 @@ namespace API.Controllers
         private readonly InvoiceHelper _invoiceHelper = invoiceHelper;
         private readonly IMapper _mapper = mapper;
 
-        [HttpGet("{invoice_number}", Name = "GetInvoiceNumber")]
+        [HttpGet("{invoice_number}")]
         public async Task<ActionResult<object>> GetInvoiceNumber(string invoice_number)
         {
             var invoice = await _invoiceHelper.GetInvoice(invoice_number);
-            var sales = await _invoiceHelper.GetSales();
-            var courier = await _invoiceHelper.GetCouriers();
-            var payment = await _invoiceHelper.GetPayments();
             var items = await _invoiceHelper.GetItems(invoice_number);
-            var courierFee = await _invoiceHelper.GetCourierFee();
 
             if (invoice == null)
             {
@@ -30,10 +26,23 @@ namespace API.Controllers
 
             return Ok(new {
                 Invoice = invoice,
+                Items = items
+            });
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<object>> Init()
+        {
+            var sales = await _invoiceHelper.GetSales();
+            var courier = await _invoiceHelper.GetCouriers();
+            var payment = await _invoiceHelper.GetPayments();
+            var courierFee = await _invoiceHelper.GetCourierFee();
+
+            return Ok(new
+            {
                 Sales = sales,
                 Courier = courier,
                 Payment = payment,
-                Items = items,
                 CourierFee = courierFee
             });
         }

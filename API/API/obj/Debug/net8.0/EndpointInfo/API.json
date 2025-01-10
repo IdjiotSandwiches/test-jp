@@ -23,24 +23,29 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/TrInvoice"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TrInvoice"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TrInvoice"
-                }
-              }
-            }
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Invoice": {
+      "get": {
+        "tags": [
+          "Invoice"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Invoice"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -87,54 +92,6 @@
   },
   "components": {
     "schemas": {
-      "TrInvoice": {
-        "required": [
-          "courierFee",
-          "courierID",
-          "invoiceDate",
-          "invoiceNo",
-          "invoiceTo",
-          "paymentType",
-          "salesID",
-          "shipTo"
-        ],
-        "type": "object",
-        "properties": {
-          "invoiceNo": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "invoiceDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "invoiceTo": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "shipTo": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "salesID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "courierID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "paymentType": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "courierFee": {
-            "type": "number",
-            "format": "double"
-          }
-        },
-        "additionalProperties": false
-      },
       "WeatherForecast": {
         "type": "object",
         "properties": {

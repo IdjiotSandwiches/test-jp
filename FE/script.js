@@ -1,23 +1,28 @@
-function fetchRequest(url) {
-    fetch(url, {
+
+
+async function customFetch(url, options = {}) {
+    options.headers = {
+        ...options.headers,
         'X-Requested-With': 'XMLHttpRequest',
-    }).then(response => {
+    }
+
+    try {
+        const response = await fetch(url, options);
         if (!response.ok) throw new Error('Not Found');
-        return response.json();
+        return await response.json();
+    } catch (error) {
+        alert(error);
+    }
+}
+
+function initPage() {
+    const url = `http://localhost:5265/api/invoice/`;
+    customFetch(url, {
+        method: 'GET',
     }).then(response => {
-        console.log(response);
-        const invoiceDate = document.querySelector('#invoice_date');
-        const to = document.querySelector('#to');
         const salesName = document.querySelector('#sales_name');
         const courierSelect = document.querySelector('#courier');
-        const shipTo = document.querySelector('#ship_to');
         const paymentType = document.querySelector('#payment_type');
-        const table = document.querySelector('table tbody');
-
-        courierSelect.replaceChildren();
-        paymentType.replaceChildren();
-        salesName.replaceChildren();
-        table.replaceChildren();
 
         response.courier.forEach(option => {
             let item = `<option value="${option.courierID}">${option.courierName}</option>`;
@@ -33,6 +38,21 @@ function fetchRequest(url) {
             let item = `<option value="${option.salesID}">${option.salesName}</option>`;
             salesName.insertAdjacentHTML('beforeend', item);
         });
+    });
+}
+
+function fetchRequest(url) {
+    customFetch(url, {
+        'X-Requested-With': 'XMLHttpRequest',
+    }).then(response => {
+        const salesName = document.querySelector('#sales_name');
+        const courierSelect = document.querySelector('#courier');
+        const paymentType = document.querySelector('#payment_type');
+        const invoiceDate = document.querySelector('#invoice_date');
+        const to = document.querySelector('#to');
+        const shipTo = document.querySelector('#ship_to');
+        const table = document.querySelector('table tbody');
+        table.replaceChildren();
 
         response.items.forEach(item => {
             let row = `<tr>
@@ -54,9 +74,7 @@ function fetchRequest(url) {
         to.value = response.invoice.invoiceTo;
         shipTo.value = response.invoice.shipTo;
 
-    }).catch(error => {
-        alert(error)
-    })
+    });
 }
 
 function changeSelectOption(options, value) {
@@ -66,6 +84,7 @@ function changeSelectOption(options, value) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+    initPage();
     document.querySelector('#view').addEventListener('click', function(e) {
         e.preventDefault();
         let val = document.querySelector('#no_invoice').value;
